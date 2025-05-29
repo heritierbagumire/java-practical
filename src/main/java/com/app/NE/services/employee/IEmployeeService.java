@@ -2,11 +2,13 @@ package com.app.NE.services.employee;
 
 import com.app.NE.dto.requests.RegisterEmployeeDTO;
 import com.app.NE.dto.responses.ApiResponse;
-import com.app.NE.models.Employee;
+import org.springframework.data.domain.Pageable;
 
 public interface IEmployeeService {
-    ApiResponse getAllEmployees();
-    ApiResponse getEmployeeById(String code);
+    ApiResponse getAllEmployees(Pageable pageable);
+    ApiResponse getEmployeeByCode(String code);
     ApiResponse updateEmployee(String code, RegisterEmployeeDTO dto);
-    ApiResponse deleteEmployee(String code);
+    ApiResponse disableEmployee(String code);
+    ApiResponse enableEmployee(String code);
+    ApiResponse getMyEmployees();
 }

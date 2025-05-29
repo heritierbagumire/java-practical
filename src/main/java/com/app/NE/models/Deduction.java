@@ -1,6 +1,7 @@
 package com.app.NE.models;
 
 import com.app.NE.audits.InitiatorAudit;
+import com.app.NE.enums.EDeductionName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +23,8 @@ public class Deduction extends InitiatorAudit {
     private String code;
 
     @Column(unique = true)
-    private String deductionName;
+    @Enumerated(EnumType.STRING)
+    private EDeductionName deductionName;
 
     private BigDecimal percentage;
 }

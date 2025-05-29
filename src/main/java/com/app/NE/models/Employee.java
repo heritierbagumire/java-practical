@@ -54,5 +54,6 @@ public class Employee  {
 
     @OneToOne
     private Role role;
+    private String institution;
 }
 

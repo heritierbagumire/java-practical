@@ -37,6 +37,8 @@ public class User extends InitiatorAudit {
     @JsonIgnore
     private String password;
 
+    private String institution;
+
     @OneToOne
     private Role role;
 }

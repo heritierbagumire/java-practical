@@ -34,4 +34,5 @@ public class RegisterDTO {
 
     private ERole role;
     private String adminCreationKey;
+    private String institution;
 }

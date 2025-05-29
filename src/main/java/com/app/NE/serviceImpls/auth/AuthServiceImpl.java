@@ -74,6 +74,13 @@ public class AuthServiceImpl implements IAuthService {
 
         User user = new User();
         user.setFirstName(dto.getFirstName());
+        if(requestedRole == ERole.ROLE_MANAGER){
+            // check if the institution is given
+            if(dto.getInstitution() == null){
+                throw new BadRequestException("Institution must be provided.");
+            }
+            user.setInstitution(dto.getInstitution());
+        }
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
         user.setPhone(dto.getPhone());
@@ -127,6 +134,7 @@ public class AuthServiceImpl implements IAuthService {
         employee.setPassword(Utility.hash(dto.getPassword()));
         employee.setDateOfBirth(dto.getDateOfBirth());
         employee.setStatus(dto.getStatus());
+        employee.setInstitution(this.getPrincipal().getInstitution());
         employee.setRole(role);
         employee.setCode(Utility.generateEmployeeCode());
         userRepository.save(user);

@@ -6,7 +6,7 @@ BEGIN
         INSERT INTO messages (employee_code, message, month, year, sent_at, sent)
         VALUES (
             NEW.employee_code,
-            'Dear ' || (SELECT firstname FROM employees WHERE code = NEW.employee_code) ||
+            'Dear ' || (SELECT firstname FROM employee WHERE code = NEW.employee_code) ||
             ', your salary payment for ' || NEW.month || '/' || NEW.year || ' has been processed.',
             NEW.month,
             NEW.year,

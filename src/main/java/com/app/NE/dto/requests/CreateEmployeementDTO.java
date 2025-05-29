@@ -1,20 +1,21 @@
-package com.app.NE.dto;
+package com.app.NE.dto.requests;
 
+import com.app.NE.enums.EEmployementStatus;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmploymentRequest {
-    private String employeeCode;
+public class CreateEmployeementDTO {
     private String department;
     private String position;
     private BigDecimal baseSalary;
-    private LocalDate joiningDate;
-} 
+    private EEmployementStatus status;
+    private LocalDate joinDate;
+    private String employeeCode;
+}
