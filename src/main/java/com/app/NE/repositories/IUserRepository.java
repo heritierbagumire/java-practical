@@ -15,9 +15,4 @@ public interface IUserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
 
     Optional<Object> findByPhone(@NotEmpty(message = "The phone number is required.") String phone);
-
-    Optional<Object> findByNationalId(@NotEmpty(message = "The national id is required.") String nationalId);
-
-    @Query("SELECT u FROM User u JOIN u.meters m WHERE m.meterNumber = :meterNumber")
-    Optional<User> findByMeterNumber(@Param("meterNumber") int meterNumber);
 }

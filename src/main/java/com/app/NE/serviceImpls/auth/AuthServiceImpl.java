@@ -2,12 +2,15 @@ package com.app.NE.serviceImpls.auth;
 
 import com.app.NE.dto.requests.LoginDTO;
 import com.app.NE.dto.requests.RegisterDTO;
+import com.app.NE.dto.requests.RegisterEmployeeDTO;
 import com.app.NE.dto.responses.ApiResponse;
 import com.app.NE.enums.ERole;
 import com.app.NE.exceptions.BadRequestException;
 import com.app.NE.exceptions.UnauthorisedException;
+import com.app.NE.models.Employee;
 import com.app.NE.models.Role;
 import com.app.NE.models.User;
+import com.app.NE.repositories.IEmployeeRepository;
 import com.app.NE.repositories.IRoleRepository;
 import com.app.NE.repositories.IUserRepository;
 import com.app.NE.security.jwt.JwtService;
@@ -29,6 +32,7 @@ public class AuthServiceImpl implements IAuthService {
     private final IUserRepository userRepository;
     private final JwtService jwtService;
     private final IRoleRepository roleRepository;
+    private final IEmployeeRepository employeeRepository;
     @Value("${app.security.admin-key}")
     private String adminKey;
 
@@ -53,11 +57,11 @@ public class AuthServiceImpl implements IAuthService {
 
     @Override
     public ApiResponse register(RegisterDTO dto) {
-        if (userRepository.findByEmail(dto.getEmail()).isPresent() || userRepository.findByPhone(dto.getPhone()).isPresent() || userRepository.findByNationalId(dto.getNationalId()).isPresent()) {
-            throw new BadRequestException("A user with either this email or phone or national id already exists.");
+        if (userRepository.findByEmail(dto.getEmail()).isPresent() || userRepository.findByPhone(dto.getPhone()).isPresent()) {
+            throw new BadRequestException("A user with either this email or phone already exists.");
         }
 
-        ERole requestedRole = dto.getRole() != null ? dto.getRole() : ERole.ROLE_CUSTOMER;
+        ERole requestedRole = dto.getRole() != null ? dto.getRole() : ERole.ROLE_MANAGER;
         Role role = roleRepository.findByRole(requestedRole)
                 .orElseThrow(() -> new BadRequestException("Role not found."));
 
@@ -69,10 +73,10 @@ public class AuthServiceImpl implements IAuthService {
         }
 
         User user = new User();
-        user.setNames(dto.getNames());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
         user.setPhone(dto.getPhone());
-        user.setNationalId(dto.getNationalId());
         user.setPassword(Utility.hash(dto.getPassword()));
         user.setRole(role);
 
@@ -80,7 +84,7 @@ public class AuthServiceImpl implements IAuthService {
 
         String token = jwtService.generateToken(user);
 
-        return new ApiResponse<>(token, "User registered successfully");
+        return new ApiResponse<>(token, String.format("User %s registered successfully.", requestedRole.toString()));
     }
 
     @Override
@@ -94,5 +98,43 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public ApiResponse getLoggedInUser() {
         return new ApiResponse(getPrincipal(), null);
+    }
+
+    @Override
+    public ApiResponse registerEmployee(RegisterEmployeeDTO dto) {
+        // crate the employee
+        if (userRepository.findByEmail(dto.getEmail()).isPresent() || userRepository.findByPhone(dto.getPhone()).isPresent()) {
+            throw new BadRequestException("An employee with either this email or phone already exists.");
+        }
+
+        ERole requestedRole = ERole.ROLE_EMPLOYEE;
+        Role role = roleRepository.findByRole(requestedRole)
+                .orElseThrow(() -> new BadRequestException("Role not found."));
+
+        User user = new User();
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setEmail(dto.getEmail());
+        user.setPhone(dto.getPhone());
+        user.setPassword(Utility.hash(dto.getPassword()));
+        user.setRole(role);
+
+        Employee employee = new Employee();
+        employee.setFirstName(dto.getFirstName());
+        employee.setLastName(dto.getLastName());
+        employee.setEmail(dto.getEmail());
+        employee.setPhone(dto.getPhone());
+        employee.setPassword(Utility.hash(dto.getPassword()));
+        employee.setDateOfBirth(dto.getDateOfBirth());
+        employee.setStatus(dto.getStatus());
+        employee.setRole(role);
+        employee.setCode(Utility.generateEmployeeCode());
+        userRepository.save(user);
+        employeeRepository.save(employee);
+
+        String token = jwtService.generateToken(user);
+
+        return new ApiResponse<>(token, String.format("Employee %s registered successfully.", dto.getFirstName()));
+
     }
 }

@@ -14,8 +14,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterDTO {
-    @NotEmpty(message = "The names are required.")
-    private String names;
+    @NotEmpty(message = "The last name is required.")
+    private String lastName;
+
+    @NotEmpty(message = "The first name is required.")
+    private String firstName;
 
     @NotEmpty(message = "The email is required.")
     @Email(message = "Invalid email provided")
@@ -24,10 +27,6 @@ public class RegisterDTO {
     @NotEmpty(message = "The phone number is required.")
     @ValidPhoneNumber
     private String phone;
-
-    @NotEmpty(message = "The national id is required.")
-    @ValidNationalId
-    private String nationalId;
 
     @NotEmpty(message = "The password is required.")
     @ValidPassword

@@ -3,30 +3,31 @@ package com.app.NE.models;
 import com.app.NE.audits.InitiatorAudit;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "notification")
-@Setter
-@Getter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-public class Notification extends InitiatorAudit {
+@AllArgsConstructor
+@Table(name = "messages")
+public class Message extends InitiatorAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "meter_number", length = 6)
-    private int meterNumber;
+    @ManyToOne
+    @JoinColumn(name = "employee_code")
+    private Employee employee;
 
-    @Column(name = "message")
+    @Column(columnDefinition = "TEXT")
     private String message;
 
-    @Column(name = "issued_date")
-    private LocalDateTime issuedDate;
+    private Integer month;
+    private Integer year;
+    private LocalDateTime sentAt;
+
+    private boolean sent;
 }

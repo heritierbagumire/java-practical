@@ -1,25 +1,40 @@
 package com.app.NE.models;
 
-import com.app.NE.audits.InitiatorAudit;
+import com.app.NE.enums.EEmployeeStatus;
+import com.app.NE.enums.ERole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "systemuser")
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class User extends InitiatorAudit {
+@AllArgsConstructor
+@Table(name = "employee")
+public class Employee  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
+    @Column(nullable = false, unique = true)
+    private String code;
+
+    private LocalDate dateOfBirth;
+
+    @Enumerated(EnumType.STRING)
+    private EEmployeeStatus status;
 
     @Column(name = "firstname")
     private String firstName;
@@ -40,3 +55,4 @@ public class User extends InitiatorAudit {
     @OneToOne
     private Role role;
 }
+

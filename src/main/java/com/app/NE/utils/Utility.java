@@ -31,4 +31,13 @@ public class Utility {
 
         return sb.toString();
     }
+
+    public static String generateEmployeeCode() {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            sb.append(random.nextInt(10));
+        }
+        return "EMP-" + sb.toString();
+    }
 }

@@ -45,10 +45,9 @@ public class SecurityConfig {
                         "/actuator/**",
                         "/api-docs/**"
                         ).permitAll()
-                // ADMIN AUTHORISED REQs
-                .requestMatchers("/api/v1/meter/update/**", "/api/v1/meter/all", "/api/v1/meter/create", "/api/v1/meter/delete/").hasAuthority(ERole.ROLE_ADMIN.name())
+                // ADMIN && MANAGER AUTHORISED REQs
+                .requestMatchers("/api/v1/employee/register").hasAnyRole("ADMIN", "MANAGER")
                 // CUSTOMER AUTHORISED REQs
-                .requestMatchers("/api/v1/meter/all/mine").hasAuthority(ERole.ROLE_CUSTOMER.name())
                 .anyRequest().authenticated());
 
         http.exceptionHandling(

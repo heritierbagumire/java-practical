@@ -1,31 +1,28 @@
 package com.app.NE.models;
 
 import com.app.NE.audits.InitiatorAudit;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import java.math.BigDecimal;
 import java.util.UUID;
 
-@Setter
-@Getter
 @Entity
-@Table(name = "meter")
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-public class Meter extends InitiatorAudit {
+@AllArgsConstructor
+@Table(name = "deduction")
+public class Deduction extends InitiatorAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(nullable = false, unique = true)
-    private int meterNumber;
+    private String code;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonBackReference
-    private User user;
+    @Column(unique = true)
+    private String deductionName;
+
+    private BigDecimal percentage;
 }

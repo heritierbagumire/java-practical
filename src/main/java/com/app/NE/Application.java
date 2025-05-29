@@ -28,9 +28,14 @@ public class Application {
 				adminRole.setRole(ERole.ROLE_ADMIN);
 				roleRepository.save(adminRole);
 			}
-			if(roleRepository.findByRole(ERole.ROLE_CUSTOMER).isEmpty()){
+			if(roleRepository.findByRole(ERole.ROLE_EMPLOYEE).isEmpty()){
 				Role customerRole = new Role();
-				customerRole.setRole(ERole.ROLE_CUSTOMER);
+				customerRole.setRole(ERole.ROLE_EMPLOYEE);
+				roleRepository.save(customerRole);
+			}
+			if(roleRepository.findByRole(ERole.ROLE_MANAGER).isEmpty()){
+				Role customerRole = new Role();
+				customerRole.setRole(ERole.ROLE_MANAGER);
 				roleRepository.save(customerRole);
 			}
 		};
